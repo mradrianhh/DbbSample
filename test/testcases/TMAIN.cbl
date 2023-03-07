@@ -1,0 +1,604 @@
+       PROCESS NODLL,NODYNAM,TEST(NOSEP),NOCICS,NOSQL,PGMN(LU)
+      *+---------------------------------------------------------------+
+      *| TMAIN                                                         |
+      *| PRODUCT: IBM DEVELOPER FOR Z/OS                               |
+      *| COMPONENT: IBM Z/OS AUTOMATED UNIT TESTING FRAMEWORK (ZUNIT)  |
+      *|   FOR ENTERPRISE COBOL AND PL/I                               |
+      *| PROGRAM: ENTERPRISE COBOL ZUNIT TEST CASE FOR DYNAMIC RUNNER  |
+      *| DATE GENERATED: 03/07/2023 13:13                              |
+      *| ID: 699a8653-6060-45c8-9398-d2b8f7b5d0f0                      |
+      *+---------------------------------------------------------------+
+      *+---------------------------------------------------------------+
+      *| TEST_TEST1                                                    |
+      *|     THIS PROGRAM IS FOR TEST TEST1                            |
+      *+---------------------------------------------------------------+
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. 'TEST_TEST1'.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       Special-Names.
+           Decimal-Point Is Comma.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 PROGRAM-NAME   PIC X(8)  VALUE 'MAIN'.
+       01 BZ-ASSERT.
+         03 MESSAGE-LEN PIC S9(4) COMP-4 VALUE 24.
+         03 MESSAGE-TXT PIC X(254) VALUE 'HELLO FROM TEST CALLBACK'.
+       01  BZ-P1 PIC S9(9) COMP-4 VALUE 4.
+       01  BZ-P2 PIC S9(9) COMP-4 VALUE 2001.
+       01  BZ-P3 PIC X(3) VALUE 'AZU'.
+       01 BZ-TRACE.
+         03 TRACE-LEN       PIC S9(4) COMP-4 VALUE 5.
+         03 TRACE-TXT       PIC X(254) VALUE 'TRACE'.
+       01 BZUASSRT          PIC X(8) VALUE 'BZUASSRT'.
+       01 BZUTRACE          PIC X(8) VALUE 'BZUTRACE'.
+       01 AZ-TRACE-PTR      POINTER.
+       01 ASSERT-ST.
+         03 ASSERT-RC PIC 9(9) BINARY VALUE 4.
+         03 ASSERT-TEXT PIC 9(4) BINARY VALUE 0.
+       01 AZ-TEST-NAME-LEN       PIC S9(9) COMP-5.
+       01 AZ-RC-WORK             PIC S9(4) USAGE BINARY.
+       LOCAL-STORAGE SECTION.
+       LINKAGE SECTION.
+       01 AZ-TEST                   PIC X(80).
+       01 AZ-ARG-LIST.
+         03 ARG-LENGTH PIC 9(4) COMP-4.
+         03 ARG-DATA PIC X(256).
+       PROCEDURE DIVISION USING AZ-TEST AZ-ARG-LIST.
+      * START
+           DISPLAY 'TEST_TEST1 STARTED...'
+           MOVE 0 TO AZ-TEST-NAME-LEN.
+           INSPECT AZ-TEST TALLYING AZ-TEST-NAME-LEN FOR
+           CHARACTERS BEFORE INITIAL SPACE.
+      * INITIALIZE PARAMETER
+      * SET AREA ADDRESS TO POINTER
+      * SET INPUT VALUE
+           MOVE 0 TO RETURN-CODE.
+      * CALL TEST PROGRAM
+           DISPLAY 'CALL MAIN'
+           CALL PROGRAM-NAME
+           .
+      * EVALUATE OUTPUT VALUE
+           MOVE 0 TO RETURN-CODE
+      * END
+           DISPLAY 'TEST_TEST1 SUCCESSFUL.'
+           GOBACK.
+       END PROGRAM TEST_TEST1.
+      *+---------------------------------------------------------------+
+      *| BZU_TEST                                                      |
+      *|     THIS PROGRAM IS CALLBACK DEFINITION FOR TEST              |
+      *+---------------------------------------------------------------+
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. 'BZU_TEST'.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       Special-Names.
+           Decimal-Point Is Comma.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 PROGRAM-NAME   PIC X(8)  VALUE 'MAIN'.
+       01 BZ-ASSERT.
+         03 MESSAGE-LEN PIC S9(4) COMP-4 VALUE 24.
+         03 MESSAGE-TXT PIC X(254) VALUE 'HELLO FROM TEST CALLBACK'.
+       01  BZ-P1 PIC S9(9) COMP-4 VALUE 4.
+       01  BZ-P2 PIC S9(9) COMP-4 VALUE 2001.
+       01  BZ-P3 PIC X(3) VALUE 'AZU'.
+       01 BZ-TRACE.
+         03 TRACE-LEN       PIC S9(4) COMP-4 VALUE 5.
+         03 TRACE-TXT       PIC X(254) VALUE 'TRACE'.
+       01 BZUASSRT          PIC X(8) VALUE 'BZUASSRT'.
+       01 BZUTRACE          PIC X(8) VALUE 'BZUTRACE'.
+       01 AZ-TRACE-PTR      POINTER.
+       01 ASSERT-ST.
+         03 ASSERT-RC PIC 9(9) BINARY VALUE 4.
+         03 ASSERT-TEXT PIC 9(4) BINARY VALUE 0.
+       01 AZ-TEST-NAME-LEN       PIC S9(9) COMP-5.
+       LOCAL-STORAGE SECTION.
+       LINKAGE SECTION.
+       01 AZ-TEST                   PIC X(80).
+       01 AZ-INFO-BLOCK.
+          COPY BZUITERC.
+       01 AZ-ARG-LIST.
+         03 ARG-LENGTH PIC 9(4) COMP-4.
+         03 ARG-DATA PIC X(256).
+       PROCEDURE DIVISION.
+      * SET INPUT VALUE
+           ENTRY "PGM_INPT_MAIN" USING AZ-TEST AZ-INFO-BLOCK
+           .
+           DISPLAY 'PGM_INPT_MAIN INPUT VALUES...'.
+           MOVE 0 TO RETURN-CODE.
+           INSPECT AZ-TEST TALLYING AZ-TEST-NAME-LEN FOR CHARACTERS
+             BEFORE INITIAL SPACE.
+           EVALUATE AZ-TEST(1:AZ-TEST-NAME-LEN)
+           WHEN SPACE
+             CONTINUE
+           WHEN OTHER
+             CONTINUE
+           END-EVALUATE.
+           PERFORM TEARDOWN.
+      * EVALUATE OUTPUT VALUE
+           ENTRY "PGM_OUTP_MAIN" USING AZ-TEST AZ-INFO-BLOCK
+           .
+           DISPLAY 'PGM_OUTP_MAIN CHECK VALUES...'.
+           MOVE 4 TO RETURN-CODE.
+           INSPECT AZ-TEST TALLYING AZ-TEST-NAME-LEN FOR CHARACTERS
+             BEFORE INITIAL SPACE.
+           EVALUATE AZ-TEST(1:AZ-TEST-NAME-LEN)
+           WHEN SPACE
+             CONTINUE
+           WHEN 'TEST1'
+             MOVE 0 TO RETURN-CODE
+           WHEN OTHER
+             CONTINUE
+           END-EVALUATE.
+           PERFORM TEARDOWN.
+       TEARDOWN.
+           DISPLAY 'BZU_TEST SUCCESSFUL.'
+           GOBACK.
+       END PROGRAM BZU_TEST.
+      *+---------------------------------------------------------------+
+      *| BZU_INIT                                                      |
+      *|     INITIAL PROCEDURE                                         |
+      *+---------------------------------------------------------------+
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. 'BZU_INIT'.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 AZ-TEST-NAME-LEN      PIC S9(9) COMP-5.
+       01 AZ-TESTCASE-ID        PIC X(36)
+           VALUE '699a8653-6060-45c8-9398-d2b8f7b5d0f0'.
+       LINKAGE SECTION.
+       01 AZ-TEST               PIC X(80).
+       01 AZ-TEST-ID            PIC X(80).
+       PROCEDURE DIVISION USING AZ-TEST AZ-TEST-ID.
+           MOVE 0 TO AZ-TEST-NAME-LEN.
+           INSPECT AZ-TEST TALLYING AZ-TEST-NAME-LEN FOR
+           CHARACTERS BEFORE INITIAL SPACE.
+           DISPLAY 'BZU_INIT : ' AZ-TEST(1:AZ-TEST-NAME-LEN)
+           MOVE AZ-TESTCASE-ID TO AZ-TEST-ID
+           GOBACK.
+       END PROGRAM BZU_INIT.
+      *+---------------------------------------------------------------+
+      *| BZU_TERM                                                      |
+      *|     TERMINATION PROCEDURE                                     |
+      *+---------------------------------------------------------------+
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. 'BZU_TERM'.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 AZ-TEST-NAME-LEN      PIC S9(9) COMP-5.
+       LINKAGE SECTION.
+       01 AZ-TEST               PIC X(80).
+       PROCEDURE DIVISION USING AZ-TEST.
+           MOVE 0 TO AZ-TEST-NAME-LEN.
+           INSPECT AZ-TEST TALLYING AZ-TEST-NAME-LEN FOR
+           CHARACTERS BEFORE INITIAL SPACE.
+           DISPLAY 'BZU_TERM : ' AZ-TEST(1:AZ-TEST-NAME-LEN)
+           GOBACK.
+       END PROGRAM BZU_TERM.
+      *+---------------------------------------------------------------+
+      *| AMTTRANS                                                      |
+      *|                                                               |
+      *+---------------------------------------------------------------+
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. 'PGM_AMTTRANS'.
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       Special-Names.
+           Decimal-Point Is Comma.
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 BZ-ASSERT.
+         03 MESSAGE-LEN PIC S9(4) COMP-4 VALUE 24.
+         03 MESSAGE-TXT PIC X(254) VALUE 'HELLO FROM STUB CALLBACK'.
+       01  BZ-P1 PIC S9(9) COMP-4 VALUE 4.
+       01  BZ-P2 PIC S9(9) COMP-4 VALUE 2001.
+       01  BZ-P3 PIC X(3) VALUE 'AZU'.
+       01 BZ-TRACE.
+         03 TRACE-LEN       PIC S9(4) COMP-4 VALUE 5.
+         03 TRACE-TXT       PIC X(254) VALUE 'TRACE'.
+       01 BZUASSRT          PIC X(8) VALUE 'BZUASSRT'.
+       01 BZUTRACE          PIC X(8) VALUE 'BZUTRACE'.
+       01 AZ-TRACE-PTR      POINTER.
+       01 AZ-TEST-LEN       PIC S9(8) COMP.
+       01 AZ-RECORD.
+         03 AZ-RECORD-COUNT-OT PIC 9(5) COMP-5 VALUE 0.
+         03 AZ-RECORD-COUNT-IN PIC 9(5) COMP-5 VALUE 0.
+       01 AZ-RC-WORK        PIC S9(4) USAGE BINARY.
+       01 AZ-COMPARE.
+         03 AZ-COMPARE-ITEM-NAME-PTR  POINTER.
+         03 AZ-COMPARE-ITEM-NAME-LEN  PIC S9(9) COMP-5.
+         03 AZ-COMPARE-ITEM-VALUE-PTR POINTER.
+         03 AZ-COMPARE-ITEM-VALUE-LEN PIC S9(9) COMP-5.
+         03 AZ-COMPARE-ITEM-EXP-VALUE-PTR POINTER.
+         03 AZ-COMPARE-ITEM-EXP-VALUE-LEN PIC S9(9) COMP-5.
+       1 AZ-TEST-EXPECTED-DATA-VALUE.
+          3 AZU00000000.
+            5 PIC X(1) DISPLAY VALUE 'A'.
+       1 AZ-TEST-INPUT-DATA-VALUE.
+          3 AZU00000001.
+            5 PIC X(1) DISPLAY VALUE 'A'.
+       LOCAL-STORAGE SECTION.
+       1 AZ-COMPARE-ITEM-NAMES.
+         3 AZU00000002.
+            5 PIC X(20) DISPLAY VALUE 'TRANSACTION-CODE OF '.
+            5 PIC X(18) DISPLAY VALUE 'AMOUNT-TRANSACTION'.
+         3 AZU00000004.
+            5 PIC X(20) DISPLAY VALUE 'TRANSACTION-CLASS OF'.
+            5 PIC X(19) DISPLAY VALUE ' AMOUNT-TRANSACTION'.
+         3 AZU00000006.
+            5 PIC X(20) DISPLAY VALUE 'TRANSACTION-TYPE OF '.
+            5 PIC X(18) DISPLAY VALUE 'AMOUNT-TRANSACTION'.
+         3 AZU00000008.
+            5 PIC X(20) DISPLAY VALUE 'TRANSACTION-AMOUNT O'.
+            5 PIC X(20) DISPLAY VALUE 'F AMOUNT-TRANSACTION'.
+         3 AZU0000000A.
+            5 PIC X(20) DISPLAY VALUE 'TRANSACTION-FROM-ACC'.
+            5 PIC X(20) DISPLAY VALUE 'OUNT OF AMOUNT-TRANS'.
+            5 PIC X(6) DISPLAY VALUE 'ACTION'.
+         3 AZU0000000C.
+            5 PIC X(20) DISPLAY VALUE 'TRANSACTION-TO-ACCOU'.
+            5 PIC X(20) DISPLAY VALUE 'NT OF AMOUNT-TRANSAC'.
+            5 PIC X(4) DISPLAY VALUE 'TION'.
+         3 AZU0000000E.
+            5 PIC X(20) DISPLAY VALUE 'ACCOUNT-BALANCE OF A'.
+            5 PIC X(6) DISPLAY VALUE 'CCOUNT'.
+         3 AZU00000010.
+            5 PIC X(20) DISPLAY VALUE 'ACCOUNT-NUMBER OF AC'.
+            5 PIC X(5) DISPLAY VALUE 'COUNT'.
+       1 AZ-COMPARE-WORK-ITEMS.
+          3 AZU00000003 PIC 9(2) OCCURS 2.
+          3 AZU00000005 PIC X(1) OCCURS 2.
+          3 AZU00000007 PIC 9(2) OCCURS 2.
+          3 AZU00000009 PIC 9(15) OCCURS 2.
+          3 AZU0000000B PIC 9(11) OCCURS 2.
+          3 AZU0000000D PIC 9(11) OCCURS 2.
+          3 AZU0000000F PIC 9(15) OCCURS 2.
+          3 AZU00000011 PIC 9(11) OCCURS 2.
+       LINKAGE SECTION.
+       01 AZ-TEST                   PIC X(80).
+       01 AZ-INFO-BLOCK.
+          COPY BZUITERC.
+       01 AZ-COMPARE-ITEM-NAME      PIC X(254).
+       01 AZ-COMPARE-ITEM-VALUE     PIC X(254).
+       01 AZ-COMPARE-ITEM-EXP-VALUE PIC X(254).
+      *  *** ACCOUNT : ZUT00000002
+       1 ZUT00000002.
+      *    *** ACCOUNT-BALANCE : ZUT00000003
+         5 ZUT00000003 PIC 9(15).
+      *    *** ACCOUNT-NUMBER : ZUT00000004
+         5 ZUT00000004 PIC 9(11).
+      *    *** ACCOUNT-TYPE : ZUT00000005
+         5 ZUT00000005 PIC X(7).
+      *    *** ACCOUNT-PRODUCT : ZUT00000006
+         5 ZUT00000006 PIC X(8).
+      *    *** ACCOUNT-BSU-SAVINGS : ZUT00000007
+         5 ZUT00000007 PIC 9(15).
+      *  *** AMOUNT-TRANSACTION : ZUT00000008
+       1 ZUT00000008.
+      *    *** TRANSACTION-CODE : ZUT00000009
+         5 ZUT00000009 PIC 99.
+      *    *** TRANSACTION-CLASS : ZUT0000000A
+         5 ZUT0000000A PIC X.
+      *    *** TRANSACTION-TYPE : ZUT0000000B
+         5 ZUT0000000B PIC 99.
+      *    *** TRANSACTION-AMOUNT : ZUT0000000C
+         5 ZUT0000000C PIC 9(15).
+      *    *** TRANSACTION-FROM-ACCOUNT : ZUT0000000D
+         5 ZUT0000000D PIC 9(11).
+      *    *** TRANSACTION-TO-ACCOUNT : ZUT0000000E
+         5 ZUT0000000E PIC 9(11).
+      *
+       PROCEDURE DIVISION.
+      * CHECK OUTPUT VALUE
+           ENTRY "PGM_INPT_AMTTRANS" USING
+              AZ-TEST AZ-INFO-BLOCK
+           ZUT00000002 ZUT00000008.
+           DISPLAY 'PGM_INPT_AMTTRANS CHECK VALUES...'.
+           MOVE 4 TO RETURN-CODE.
+           MOVE 0 TO AZ-TEST-LEN.
+           INSPECT AZ-TEST TALLYING AZ-TEST-LEN FOR
+           CHARACTERS BEFORE INITIAL SPACE.
+      * SET AREA ADDRESS TO POINTER
+           MOVE ITER OF AZ-INFO-BLOCK TO AZ-RECORD-COUNT-OT
+           EVALUATE AZ-TEST(1:AZ-TEST-LEN)
+           WHEN SPACE
+             CONTINUE
+           WHEN 'TEST1'
+             PERFORM P-OUTPUT-TEST1
+           WHEN OTHER
+             CONTINUE
+           END-EVALUATE.
+           PERFORM TEARDOWN.
+      * SET INPUT VALUE
+           ENTRY "PGM_OUTP_AMTTRANS" USING
+              AZ-TEST AZ-INFO-BLOCK
+           ZUT00000002 ZUT00000008.
+           DISPLAY 'PGM_OUTP_AMTTRANS INPUT VALUES...'.
+           MOVE 0 TO RETURN-CODE.
+           MOVE 0 TO AZ-TEST-LEN.
+           INSPECT AZ-TEST TALLYING AZ-TEST-LEN FOR
+           CHARACTERS BEFORE INITIAL SPACE.
+      * SET AREA ADDRESS TO POINTER
+           MOVE ITER OF AZ-INFO-BLOCK TO AZ-RECORD-COUNT-IN
+           EVALUATE AZ-TEST(1:AZ-TEST-LEN)
+           WHEN SPACE
+             CONTINUE
+           WHEN 'TEST1'
+             PERFORM P-INPUT-TEST1
+           WHEN OTHER
+             CONTINUE
+           END-EVALUATE.
+           PERFORM TEARDOWN.
+       TEARDOWN.
+           DISPLAY 'PGM_AMTTRANS END.'
+           GOBACK.
+       P-OUTPUT-TEST1.
+           INITIALIZE AZ-COMPARE-WORK-ITEMS
+           IF AZ-RECORD-COUNT-OT = 0 THEN
+             CONTINUE
+           ELSE IF AZ-RECORD-COUNT-OT = 1
+             MOVE 0 TO RETURN-CODE
+             IF (ZUT00000003 OF ZUT00000002 IS NUMERIC)
+                 AND (ZUT00000003 OF ZUT00000002 = 10000) THEN
+               CONTINUE
+             ELSE
+               MOVE ZUT00000003 OF ZUT00000002 TO AZU0000000F(1)
+               MOVE 10000 TO AZU0000000F(2)
+               SET AZ-COMPARE-ITEM-NAME-PTR TO ADDRESS OF AZU0000000E
+               MOVE LENGTH OF AZU0000000E TO AZ-COMPARE-ITEM-NAME-LEN
+               SET AZ-COMPARE-ITEM-VALUE-PTR TO ADDRESS OF
+           AZU0000000F(1)
+               MOVE 15 TO AZ-COMPARE-ITEM-VALUE-LEN
+               SET AZ-COMPARE-ITEM-EXP-VALUE-PTR TO ADDRESS OF
+           AZU0000000F(2)
+               MOVE 15 TO AZ-COMPARE-ITEM-EXP-VALUE-LEN
+               MOVE 1 TO MESSAGE-LEN OF BZ-ASSERT
+               STRING
+                 'COMPARE FAILED AT RECORD 1 '
+                 'IN AMTTRANS.'
+                 DELIMITED BY SIZE INTO MESSAGE-TXT OF BZ-ASSERT
+                 WITH POINTER MESSAGE-LEN OF BZ-ASSERT
+               END-STRING
+               SUBTRACT 1 FROM MESSAGE-LEN OF BZ-ASSERT
+               PERFORM THROW-ASSERTION
+             END-IF
+             IF (ZUT00000004 OF ZUT00000002 IS NUMERIC)
+                 AND (ZUT00000004 OF ZUT00000002 = 0) THEN
+               CONTINUE
+             ELSE
+               MOVE ZUT00000004 OF ZUT00000002 TO AZU00000011(1)
+               MOVE 0 TO AZU00000011(2)
+               SET AZ-COMPARE-ITEM-NAME-PTR TO ADDRESS OF AZU00000010
+               MOVE LENGTH OF AZU00000010 TO AZ-COMPARE-ITEM-NAME-LEN
+               SET AZ-COMPARE-ITEM-VALUE-PTR TO ADDRESS OF
+           AZU00000011(1)
+               MOVE 11 TO AZ-COMPARE-ITEM-VALUE-LEN
+               SET AZ-COMPARE-ITEM-EXP-VALUE-PTR TO ADDRESS OF
+           AZU00000011(2)
+               MOVE 11 TO AZ-COMPARE-ITEM-EXP-VALUE-LEN
+               MOVE 1 TO MESSAGE-LEN OF BZ-ASSERT
+               STRING
+                 'COMPARE FAILED AT RECORD 1 '
+                 'IN AMTTRANS.'
+                 DELIMITED BY SIZE INTO MESSAGE-TXT OF BZ-ASSERT
+                 WITH POINTER MESSAGE-LEN OF BZ-ASSERT
+               END-STRING
+               SUBTRACT 1 FROM MESSAGE-LEN OF BZ-ASSERT
+               PERFORM THROW-ASSERTION
+             END-IF
+             IF (ZUT00000009 OF ZUT00000008 IS NUMERIC)
+                 AND (ZUT00000009 OF ZUT00000008 = 0) THEN
+               CONTINUE
+             ELSE
+               MOVE ZUT00000009 OF ZUT00000008 TO AZU00000003(1)
+               MOVE 0 TO AZU00000003(2)
+               SET AZ-COMPARE-ITEM-NAME-PTR TO ADDRESS OF AZU00000002
+               MOVE LENGTH OF AZU00000002 TO AZ-COMPARE-ITEM-NAME-LEN
+               SET AZ-COMPARE-ITEM-VALUE-PTR TO ADDRESS OF
+           AZU00000003(1)
+               MOVE 2 TO AZ-COMPARE-ITEM-VALUE-LEN
+               SET AZ-COMPARE-ITEM-EXP-VALUE-PTR TO ADDRESS OF
+           AZU00000003(2)
+               MOVE 2 TO AZ-COMPARE-ITEM-EXP-VALUE-LEN
+               MOVE 1 TO MESSAGE-LEN OF BZ-ASSERT
+               STRING
+                 'COMPARE FAILED AT RECORD 1 '
+                 'IN AMTTRANS.'
+                 DELIMITED BY SIZE INTO MESSAGE-TXT OF BZ-ASSERT
+                 WITH POINTER MESSAGE-LEN OF BZ-ASSERT
+               END-STRING
+               SUBTRACT 1 FROM MESSAGE-LEN OF BZ-ASSERT
+               PERFORM THROW-ASSERTION
+             END-IF
+             IF ZUT0000000A OF ZUT00000008 = AZU00000000 THEN
+               CONTINUE
+             ELSE
+               MOVE ZUT0000000A OF ZUT00000008 TO AZU00000005(1)
+               MOVE AZU00000000 TO AZU00000005(2)
+               SET AZ-COMPARE-ITEM-NAME-PTR TO ADDRESS OF AZU00000004
+               MOVE LENGTH OF AZU00000004 TO AZ-COMPARE-ITEM-NAME-LEN
+               SET AZ-COMPARE-ITEM-VALUE-PTR TO ADDRESS OF
+           AZU00000005(1)
+               MOVE 1 TO AZ-COMPARE-ITEM-VALUE-LEN
+               SET AZ-COMPARE-ITEM-EXP-VALUE-PTR TO ADDRESS OF
+           AZU00000005(2)
+               MOVE 1 TO AZ-COMPARE-ITEM-EXP-VALUE-LEN
+               MOVE 1 TO MESSAGE-LEN OF BZ-ASSERT
+               STRING
+                 'COMPARE FAILED AT RECORD 1 '
+                 'IN AMTTRANS.'
+                 DELIMITED BY SIZE INTO MESSAGE-TXT OF BZ-ASSERT
+                 WITH POINTER MESSAGE-LEN OF BZ-ASSERT
+               END-STRING
+               SUBTRACT 1 FROM MESSAGE-LEN OF BZ-ASSERT
+               PERFORM THROW-ASSERTION
+             END-IF
+             IF (ZUT0000000B OF ZUT00000008 IS NUMERIC)
+                 AND (ZUT0000000B OF ZUT00000008 = 0) THEN
+               CONTINUE
+             ELSE
+               MOVE ZUT0000000B OF ZUT00000008 TO AZU00000007(1)
+               MOVE 0 TO AZU00000007(2)
+               SET AZ-COMPARE-ITEM-NAME-PTR TO ADDRESS OF AZU00000006
+               MOVE LENGTH OF AZU00000006 TO AZ-COMPARE-ITEM-NAME-LEN
+               SET AZ-COMPARE-ITEM-VALUE-PTR TO ADDRESS OF
+           AZU00000007(1)
+               MOVE 2 TO AZ-COMPARE-ITEM-VALUE-LEN
+               SET AZ-COMPARE-ITEM-EXP-VALUE-PTR TO ADDRESS OF
+           AZU00000007(2)
+               MOVE 2 TO AZ-COMPARE-ITEM-EXP-VALUE-LEN
+               MOVE 1 TO MESSAGE-LEN OF BZ-ASSERT
+               STRING
+                 'COMPARE FAILED AT RECORD 1 '
+                 'IN AMTTRANS.'
+                 DELIMITED BY SIZE INTO MESSAGE-TXT OF BZ-ASSERT
+                 WITH POINTER MESSAGE-LEN OF BZ-ASSERT
+               END-STRING
+               SUBTRACT 1 FROM MESSAGE-LEN OF BZ-ASSERT
+               PERFORM THROW-ASSERTION
+             END-IF
+             IF (ZUT0000000C OF ZUT00000008 IS NUMERIC)
+                 AND (ZUT0000000C OF ZUT00000008 = 1000) THEN
+               CONTINUE
+             ELSE
+               MOVE ZUT0000000C OF ZUT00000008 TO AZU00000009(1)
+               MOVE 1000 TO AZU00000009(2)
+               SET AZ-COMPARE-ITEM-NAME-PTR TO ADDRESS OF AZU00000008
+               MOVE LENGTH OF AZU00000008 TO AZ-COMPARE-ITEM-NAME-LEN
+               SET AZ-COMPARE-ITEM-VALUE-PTR TO ADDRESS OF
+           AZU00000009(1)
+               MOVE 15 TO AZ-COMPARE-ITEM-VALUE-LEN
+               SET AZ-COMPARE-ITEM-EXP-VALUE-PTR TO ADDRESS OF
+           AZU00000009(2)
+               MOVE 15 TO AZ-COMPARE-ITEM-EXP-VALUE-LEN
+               MOVE 1 TO MESSAGE-LEN OF BZ-ASSERT
+               STRING
+                 'COMPARE FAILED AT RECORD 1 '
+                 'IN AMTTRANS.'
+                 DELIMITED BY SIZE INTO MESSAGE-TXT OF BZ-ASSERT
+                 WITH POINTER MESSAGE-LEN OF BZ-ASSERT
+               END-STRING
+               SUBTRACT 1 FROM MESSAGE-LEN OF BZ-ASSERT
+               PERFORM THROW-ASSERTION
+             END-IF
+             IF (ZUT0000000D OF ZUT00000008 IS NUMERIC)
+                 AND (ZUT0000000D OF ZUT00000008 = 0) THEN
+               CONTINUE
+             ELSE
+               MOVE ZUT0000000D OF ZUT00000008 TO AZU0000000B(1)
+               MOVE 0 TO AZU0000000B(2)
+               SET AZ-COMPARE-ITEM-NAME-PTR TO ADDRESS OF AZU0000000A
+               MOVE LENGTH OF AZU0000000A TO AZ-COMPARE-ITEM-NAME-LEN
+               SET AZ-COMPARE-ITEM-VALUE-PTR TO ADDRESS OF
+           AZU0000000B(1)
+               MOVE 11 TO AZ-COMPARE-ITEM-VALUE-LEN
+               SET AZ-COMPARE-ITEM-EXP-VALUE-PTR TO ADDRESS OF
+           AZU0000000B(2)
+               MOVE 11 TO AZ-COMPARE-ITEM-EXP-VALUE-LEN
+               MOVE 1 TO MESSAGE-LEN OF BZ-ASSERT
+               STRING
+                 'COMPARE FAILED AT RECORD 1 '
+                 'IN AMTTRANS.'
+                 DELIMITED BY SIZE INTO MESSAGE-TXT OF BZ-ASSERT
+                 WITH POINTER MESSAGE-LEN OF BZ-ASSERT
+               END-STRING
+               SUBTRACT 1 FROM MESSAGE-LEN OF BZ-ASSERT
+               PERFORM THROW-ASSERTION
+             END-IF
+             IF (ZUT0000000E OF ZUT00000008 IS NUMERIC)
+                 AND (ZUT0000000E OF ZUT00000008 = 0) THEN
+               CONTINUE
+             ELSE
+               MOVE ZUT0000000E OF ZUT00000008 TO AZU0000000D(1)
+               MOVE 0 TO AZU0000000D(2)
+               SET AZ-COMPARE-ITEM-NAME-PTR TO ADDRESS OF AZU0000000C
+               MOVE LENGTH OF AZU0000000C TO AZ-COMPARE-ITEM-NAME-LEN
+               SET AZ-COMPARE-ITEM-VALUE-PTR TO ADDRESS OF
+           AZU0000000D(1)
+               MOVE 11 TO AZ-COMPARE-ITEM-VALUE-LEN
+               SET AZ-COMPARE-ITEM-EXP-VALUE-PTR TO ADDRESS OF
+           AZU0000000D(2)
+               MOVE 11 TO AZ-COMPARE-ITEM-EXP-VALUE-LEN
+               MOVE 1 TO MESSAGE-LEN OF BZ-ASSERT
+               STRING
+                 'COMPARE FAILED AT RECORD 1 '
+                 'IN AMTTRANS.'
+                 DELIMITED BY SIZE INTO MESSAGE-TXT OF BZ-ASSERT
+                 WITH POINTER MESSAGE-LEN OF BZ-ASSERT
+               END-STRING
+               SUBTRACT 1 FROM MESSAGE-LEN OF BZ-ASSERT
+               PERFORM THROW-ASSERTION
+             END-IF
+           ELSE
+             CONTINUE
+               END-IF
+           END-IF.
+           EXIT.
+       P-INPUT-TEST1.
+           IF AZ-RECORD-COUNT-IN = 0 THEN
+             CONTINUE
+           ELSE IF AZ-RECORD-COUNT-IN = 1
+             MOVE 10000 TO ZUT00000003 OF ZUT00000002
+             MOVE 0 TO ZUT00000004 OF ZUT00000002
+             MOVE 0 TO ZUT00000009 OF ZUT00000008
+             MOVE AZU00000001 TO ZUT0000000A OF ZUT00000008
+             MOVE 0 TO ZUT0000000B OF ZUT00000008
+             MOVE 1000 TO ZUT0000000C OF ZUT00000008
+             MOVE 0 TO ZUT0000000D OF ZUT00000008
+             MOVE 0 TO ZUT0000000E OF ZUT00000008
+           ELSE
+             CONTINUE
+           END-IF
+           END-IF.
+           EXIT.
+       THROW-ASSERTION.
+           SET ADDRESS OF AZ-COMPARE-ITEM-NAME TO
+           AZ-COMPARE-ITEM-NAME-PTR.
+           SET ADDRESS OF AZ-COMPARE-ITEM-VALUE TO
+           AZ-COMPARE-ITEM-VALUE-PTR.
+           SET ADDRESS OF AZ-COMPARE-ITEM-EXP-VALUE TO
+           AZ-COMPARE-ITEM-EXP-VALUE-PTR.
+      *    DISPLAY ERROR MESSAGE AND ENDS TEST
+           DISPLAY '****************************************************
+      -    '****************************'
+           DISPLAY 'AZU2001W THE TEST "' AZ-TEST(1:AZ-TEST-LEN)
+           '" FAILED DUE TO AN ASSERTION.'
+           DISPLAY 'AZU1101I ' MESSAGE-TXT OF BZ-ASSERT(1:MESSAGE-LEN
+           OF BZ-ASSERT)
+           DISPLAY ' DATA ITEM NAME : '
+           AZ-COMPARE-ITEM-NAME(1:AZ-COMPARE-ITEM-NAME-LEN)
+           DISPLAY '  VALUE         : '
+           AZ-COMPARE-ITEM-VALUE(1:AZ-COMPARE-ITEM-VALUE-LEN)
+           DISPLAY '  EXPECTED VALUE: '
+           AZ-COMPARE-ITEM-EXP-VALUE(1:AZ-COMPARE-ITEM-EXP-VALUE-LEN)
+           DISPLAY '****************************************************
+      -    '****************************'
+           CALL BZUASSRT USING BZ-P1 BZ-P2 BZ-P3 BZ-ASSERT
+           MOVE 1 TO TRACE-LEN OF BZ-TRACE
+           STRING 'ITEM NAME='
+           AZ-COMPARE-ITEM-NAME(1:AZ-COMPARE-ITEM-NAME-LEN)
+               DELIMITED BY SIZE INTO TRACE-TXT OF BZ-TRACE
+               WITH POINTER TRACE-LEN OF BZ-TRACE
+             END-STRING
+           SUBTRACT 1 FROM TRACE-LEN OF BZ-TRACE
+           SET AZ-TRACE-PTR TO ADDRESS OF TRACE-TXT OF BZ-TRACE
+           CALL BZUTRACE USING BZ-TRACE
+           MOVE 1 TO TRACE-LEN OF BZ-TRACE
+           STRING 'VALUE='
+           AZ-COMPARE-ITEM-VALUE(1:AZ-COMPARE-ITEM-VALUE-LEN)
+               DELIMITED BY SIZE INTO TRACE-TXT OF BZ-TRACE
+               WITH POINTER TRACE-LEN OF BZ-TRACE
+             END-STRING
+           SUBTRACT 1 FROM TRACE-LEN OF BZ-TRACE
+           CALL BZUTRACE USING BZ-TRACE
+           MOVE 1 TO TRACE-LEN OF BZ-TRACE
+           STRING 'EXPECTED VALUE='
+           AZ-COMPARE-ITEM-EXP-VALUE(1:AZ-COMPARE-ITEM-EXP-VALUE-LEN)
+               DELIMITED BY SIZE INTO TRACE-TXT OF BZ-TRACE
+               WITH POINTER TRACE-LEN OF BZ-TRACE
+             END-STRING
+           SUBTRACT 1 FROM TRACE-LEN OF BZ-TRACE
+           CALL BZUTRACE USING BZ-TRACE
+           EXIT.
+       END PROGRAM 'PGM_AMTTRANS'.

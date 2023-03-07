@@ -10,6 +10,7 @@ def COBCOPY = "${HLQ}.COBCOPY"
 def JOB = "${HLQ}.JOB"
 def OBJ = "${HLQ}.OBJ"
 def LOAD = "${HLQ}.LOAD"
+
 def LINKPARM = "LIST,MAP"
 
 def ENTRYPOINT = "HELLO"
@@ -22,6 +23,9 @@ println("Current directory: ${CURRENT_DIR}")
 
 def COBOL_DIR = new File(CURRENT_DIR, 'source/cbl')
 println("COBOL directory: ${COBOL_DIR}")
+
+def COPY_DIR = new File(CURRENT_DIR, 'source/copy')
+println("COPY directory: ${COPY_DIR}")
 
 def JCL_DIR = new File(CURRENT_DIR, 'source/jcl')
 println("JCL directory: ${JCL_DIR}")
@@ -57,6 +61,15 @@ COBOL_DIR.eachFile { file ->
 	
 }
 
+println("Copying COPY source from zFS to PDS. . .")
+COPY_DIR.eachFile { file ->
+	
+	def member = file.name.take(file.name.lastIndexOf('.'))
+	println("\t--> Copying '${file}' to '${COBCOPY}(${member})'.")
+	new CopyToPDS().file(file).dataset(COBCOPY).member(member).execute()
+	
+}
+
 println("Copying JCL source from zFS to PDS. . .")
 JCL_DIR.eachFile { file ->
 	
@@ -78,6 +91,7 @@ COBOL_DIR.eachFile { file ->
 	
 	def compile = new MVSExec().pgm("IGYCRCTL")
 	compile.dd(new DDStatement().name("SYSIN").dsn("${COBSRC}(${member})").options("shr"))
+	compile.dd(new DDStatement().name("SYSLIB").dsn("${COBCOPY}").options("shr"))
 	compile.dd(new DDStatement().name("SYSLIN").dsn("${OBJ}(${member})").options("shr"))
 	
 	(1..17).toList().each { num ->

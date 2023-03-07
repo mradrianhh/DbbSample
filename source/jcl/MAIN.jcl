@@ -2,7 +2,7 @@
 //         CLASS=T,
 //         MSGCLASS=X,
 //         NOTIFY=&SYSUID
-//GO      EXEC PGM=HELLO
+//GO      EXEC PGM=MAIN
 //STEPLIB DD DSN=AD07288.DBBSAMP.BUILD.LOAD,
 //        DISP=SHR
 //SYSOUT       DD SYSOUT=*

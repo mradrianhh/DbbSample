@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<runner:RunnerConfiguration xmlns:runner="http://www.ibm.com/zUnit/3.0.0.0/TestRunner" id="0360119a-520a-4bc6-9034-76a65173295c">
+  <runner:options contOnTestCaseError="false" contOnTestCaseFail="true" contOnTestError="false" contOnTestFail="true"/>
+  <runner:testCase moduleName="TMAIN">
+    <test name="TEST1" entry="TEST_TEST1" type="BTCH" init="BZU_INIT" term="BZU_TERM" program="MAIN" commarea="" skipTest="false" resetFile="false" stubCall="true" dummy="false"/>
+  </runner:testCase>
+  <runner:intercept module="MAIN" stub="false" lengths="" retcode="true" exist="false"/>
+  <runner:intercept module="AMTTRANS" stub="true" lengths="56,42" retcode="false" exist="false"/>
+  <runner:playback moduleName="MAIN"/>
+  <runner:fileAttributes hlqDdName="AZUHLQ"/>
+</runner:RunnerConfiguration>
