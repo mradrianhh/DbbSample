@@ -1,6 +1,5 @@
-       cbl pgmname(lm)
        Identification Division.
-       Program-Id. "HelloWorld".
+       Program-Id. hello.
 
        Procedure Division.
            Display "Hello World!"
